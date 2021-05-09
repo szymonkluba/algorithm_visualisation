@@ -92,3 +92,38 @@ class InsertionSort(Algorithm):
             self.array[current_position] = current_element
             self.get_swaps(current_position, i, "swapped")
             self.get_swaps(current_position, i, "regular")
+
+
+class Quicksort(Algorithm):
+
+    name = "Quicksort"
+
+    def __init__(self, array):
+        super().__init__(array)
+
+    def algorithm(self):
+        def partition(array, begin, end):
+            i = begin - 1
+            pivot = array[end]
+            for j in range(begin, end):
+                if array[j] <= pivot:
+                    i += 1
+                    self.get_swaps(i, j, "current")
+                    array[i], array[j] = array[j], array[i]
+                    self.get_swaps(i, j, "swapped")
+                    self.get_swaps(i, j, "regular")
+            self.get_swaps(i + 1, end, "current")
+            array[i + 1], array[end] = array[end], array[i + 1]
+            self.get_swaps(i + 1, end, "swapped")
+            self.get_swaps(i + 1, end, "regular")
+            return i + 1
+
+        def quicksort(array, begin, end):
+            if begin >= end:
+                return
+
+            pivot_index = partition(array, begin, end)
+            quicksort(array, begin, pivot_index - 1)
+            quicksort(array, pivot_index + 1, end)
+
+        quicksort(self.array, 0, len(self.array) - 1)
