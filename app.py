@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO, emit
 
-from algorithms import BubbleSort, BubbleSortOptimized, InsertionSort, Quicksort
+from algorithms import BubbleSort, BubbleSortOptimized, InsertionSort, Quicksort, SelectionSort
 from helpers import generate_random_array
 
 app = Flask(__name__)
@@ -14,6 +14,7 @@ available_algorithms = {
     "bubble_sort_optimized": BubbleSortOptimized,
     "insertion_sort": InsertionSort,
     "quicksort": Quicksort,
+    "selection_sort": SelectionSort,
 }
 
 

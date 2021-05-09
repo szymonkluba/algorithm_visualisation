@@ -8,18 +8,22 @@ class Algorithm:
         self.array = array
         self.swaps = {}
 
-    def update_display(self):
+    def update_display(self, delay=None):
+        print(self.swaps)
         emit("update array", self.swaps)
-        time.sleep(.0000001)
+        if delay:
+            time.sleep(delay)
 
     def get_swaps(self, index1, index2, style):
         self.swaps["index1"] = index1
         self.swaps["value1"] = self.array[index1]
-        if index2:
-            self.swaps["index2"] = index2
-            self.swaps["value2"] = self.array[index2]
+        self.swaps["index2"] = index2
+        self.swaps["value2"] = self.array[index2]
         self.swaps["style"] = style
-        self.update_display()
+        if style == 'regular':
+            self.update_display()
+        else:
+            self.update_display(.000001)
 
     def run(self):
         self.algorithm()
@@ -127,3 +131,26 @@ class Quicksort(Algorithm):
             quicksort(array, pivot_index + 1, end)
 
         quicksort(self.array, 0, len(self.array) - 1)
+
+
+class SelectionSort(Algorithm):
+
+    name = "Selection Sort"
+
+    def __init__(self, array):
+        super().__init__(array)
+
+    def algorithm(self):
+        for i in range(len(self.array) - 1):
+            min_index = i
+            for j in range(i + 1, len(self.array)):
+                self.get_swaps(j, min_index, "current")
+                self.get_swaps(j, min_index, "regular")
+                if self.array[min_index] > self.array[j]:
+                    min_index = j
+                    self.get_swaps(j, j, "swapped")
+                    self.get_swaps(j, j, "regular")
+            self.get_swaps(i, min_index, "current")
+            self.array[i], self.array[min_index] = self.array[min_index], self.array[i]
+            self.get_swaps(i, min_index, "swapped")
+            self.get_swaps(i, min_index, "regular")
