@@ -22,23 +22,40 @@
     <script type="text/javascript"
             charset="utf-8">
         var socket = io();
+
         socket.on('connect', function () {
             socket.emit('my event', {data: 'I\'m connected!'});
         });
+
         socket.on('generated array', data => {
             let canvas = document.getElementById('canvas');
             canvas.innerHTML = ''
             for (var i = 0; i < data.array.length; i++) {
                 let node = document.createElement('div')
-                node.setAttribute('class', 'bar')
+                node.setAttribute('id', 'bar' + i.toString());
+                node.setAttribute('class', 'bar regular');
                 node.style.width = '2px';
                 node.style.height = data.array[i].toString() + 'px';
                 canvas.appendChild(node);
             }
         });
 
+        socket.on('update array', data => {
+            let bar1 = document.getElementById('bar' + data.index1.toString())
+            let bar2 = document.getElementById('bar' + data.index2.toString())
+            bar1.style.height = data.value1.toString() + 'px'
+            bar2.style.height = data.value2.toString() + 'px'
+            bar1.setAttribute('class', 'bar ' + data.style)
+            bar2.setAttribute('class', 'bar ' + data.style)
+        })
+
         function generateArray() {
             socket.emit('generate array');
+        }
+
+        function runAlgorithm() {
+            let algorithm = document.getElementById("algorithms").value
+            socket.emit('run algorithm', {"algorithm": algorithm})
         }
     </script>
     <title>Algorithm Visualisation</title>
@@ -61,24 +78,26 @@
             <div class="collapse navbar-collapse"
                  id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link"
                            href="#"
                            onclick="generateArray()">New array</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link"
-                           href="#">Features</a>
+                        <div class="form-group">
+                            <select class="form-control" id="algorithms">
+                                <option value="">Select algorithm...</option>
+                                {% for algorithm in algorithms %}
+                                <option value="{{ algorithm.key }}">{{ algorithm.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
                     </li>
                     <li class="nav-item">
                         <a class="nav-link"
-                           href="#">Pricing</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled"
                            href="#"
-                           tabindex="-1"
-                           aria-disabled="true">Disabled</a>
+                           onclick="runAlgorithm()">Run</a>
                     </li>
                 </ul>
             </div>

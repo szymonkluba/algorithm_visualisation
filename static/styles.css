@@ -1,7 +1,15 @@
 .bar {
-    background-color: cornflowerblue;
     margin: 0 1px;
 }
 
-#canvas {
+.bar.regular {
+    background-color: cornflowerblue!important;
+}
+
+.bar.current {
+    background-color: chartreuse!important;
+}
+
+.bar.swapped {
+    background-color: gold!important;
 }
