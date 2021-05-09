@@ -41,12 +41,13 @@
         });
 
         socket.on('update array', data => {
-            let bar1 = document.getElementById('bar' + data.index1.toString())
-            let bar2 = document.getElementById('bar' + data.index2.toString())
-            bar1.style.height = data.value1.toString() + 'px'
-            bar2.style.height = data.value2.toString() + 'px'
-            bar1.setAttribute('class', 'bar ' + data.style)
-            bar2.setAttribute('class', 'bar ' + data.style)
+            console.log(data);
+            let bar1 = document.getElementById('bar' + data.index1.toString());
+            let bar2 = document.getElementById('bar' + data.index2.toString());
+            bar1.style.height = data.value1.toString() + 'px';
+            bar2.style.height = data.value2.toString() + 'px';
+            bar1.setAttribute('class', 'bar ' + data.style);
+            bar2.setAttribute('class', 'bar ' + data.style);
         })
 
         function generateArray() {
