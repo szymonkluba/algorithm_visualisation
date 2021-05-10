@@ -2,6 +2,8 @@ import time
 
 from flask_socketio import emit
 
+from display_update import DisplayUpdate
+
 
 class Algorithm:
     def __init__(self, array):
@@ -34,7 +36,6 @@ class Algorithm:
 
 
 class BubbleSort(Algorithm):
-
     name = "Bubble Sort"
 
     def __init__(self, array):
@@ -45,16 +46,14 @@ class BubbleSort(Algorithm):
         while swapped:
             swapped = False
             for i in range(1, len(self.array)):
-                self.get_swaps(i - 1, i, "current")
+                display_updater = DisplayUpdate(self.array, i - 1, i)
                 if self.array[i - 1] > self.array[i]:
                     self.array[i - 1], self.array[i] = self.array[i], self.array[i - 1]
-                    self.get_swaps(i - 1, i, "swapped")
                     swapped = True
-                self.get_swaps(i - 1, i, "regular")
+                display_updater.update()
 
 
 class BubbleSortOptimized(Algorithm):
-
     name = "Bubble Sort Optimized"
 
     def __init__(self, array):
@@ -66,17 +65,15 @@ class BubbleSortOptimized(Algorithm):
         while swapped:
             swapped = False
             for i in range(1, n):
-                self.get_swaps(i - 1, i, "current")
+                display_updater = DisplayUpdate(self.array, i - 1, i)
                 if self.array[i - 1] > self.array[i]:
                     self.array[i - 1], self.array[i] = self.array[i], self.array[i - 1]
-                    self.get_swaps(i - 1, i, "swapped")
                     swapped = True
-                self.get_swaps(i - 1, i, "regular")
+                display_updater.update()
             n -= 1
 
 
 class InsertionSort(Algorithm):
-
     name = "Insertion Sort"
 
     def __init__(self, array):
@@ -87,54 +84,46 @@ class InsertionSort(Algorithm):
             current_element = self.array[i]
             current_position = i
             while current_position > 0 and current_element < self.array[current_position - 1]:
-                self.get_swaps(current_position - 1, current_position, "current")
                 self.array[current_position] = self.array[current_position - 1]
-                self.get_swaps(current_position - 1, current_position, "swapped")
-                self.get_swaps(current_position - 1, current_position, "regular")
                 current_position -= 1
-            self.get_swaps(current_position, i, "current")
+            display_updater = DisplayUpdate(self.array, current_position, i)
             self.array[current_position] = current_element
-            self.get_swaps(current_position, i, "swapped")
-            self.get_swaps(current_position, i, "regular")
+            display_updater.update()
 
 
 class Quicksort(Algorithm):
-
     name = "Quicksort"
 
     def __init__(self, array):
         super().__init__(array)
 
-    def algorithm(self):
-        def partition(array, begin, end):
-            i = begin - 1
-            pivot = array[end]
-            for j in range(begin, end):
-                if array[j] <= pivot:
-                    i += 1
-                    self.get_swaps(i, j, "current")
-                    array[i], array[j] = array[j], array[i]
-                    self.get_swaps(i, j, "swapped")
-                    self.get_swaps(i, j, "regular")
-            self.get_swaps(i + 1, end, "current")
-            array[i + 1], array[end] = array[end], array[i + 1]
-            self.get_swaps(i + 1, end, "swapped")
-            self.get_swaps(i + 1, end, "regular")
-            return i + 1
+    def algorithm(self, array=None, begin=0, end=0):
+        if not array:
+            array = self.array
+            end = len(self.array) - 1
+        if begin >= end:
+            return
 
-        def quicksort(array, begin, end):
-            if begin >= end:
-                return
+        pivot_index = self.partition(array, begin, end)
+        self.algorithm(array, begin, pivot_index - 1)
+        self.algorithm(array, pivot_index + 1, end)
 
-            pivot_index = partition(array, begin, end)
-            quicksort(array, begin, pivot_index - 1)
-            quicksort(array, pivot_index + 1, end)
-
-        quicksort(self.array, 0, len(self.array) - 1)
+    def partition(self, array, begin, end):
+        i = begin - 1
+        pivot = array[end]
+        for j in range(begin, end):
+            if array[j] <= pivot:
+                i += 1
+                display_updater = DisplayUpdate(self.array, i, j)
+                array[i], array[j] = array[j], array[i]
+                display_updater.update()
+        display_updater = DisplayUpdate(self.array, i + 1, end)
+        array[i + 1], array[end] = array[end], array[i + 1]
+        display_updater.update()
+        return i + 1
 
 
 class SelectionSort(Algorithm):
-
     name = "Selection Sort"
 
     def __init__(self, array):
@@ -144,13 +133,10 @@ class SelectionSort(Algorithm):
         for i in range(len(self.array) - 1):
             min_index = i
             for j in range(i + 1, len(self.array)):
-                self.get_swaps(j, min_index, "current")
-                self.get_swaps(j, min_index, "regular")
+                display_updater = DisplayUpdate(self.array, min_index, j)
                 if self.array[min_index] > self.array[j]:
                     min_index = j
-                    self.get_swaps(j, j, "swapped")
-                    self.get_swaps(j, j, "regular")
-            self.get_swaps(i, min_index, "current")
+                display_updater.update()
+            display_updater = DisplayUpdate(self.array, i, min_index)
             self.array[i], self.array[min_index] = self.array[min_index], self.array[i]
-            self.get_swaps(i, min_index, "swapped")
-            self.get_swaps(i, min_index, "regular")
+            display_updater.update()

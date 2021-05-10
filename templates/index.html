@@ -41,14 +41,25 @@
         });
 
         socket.on('update array', data => {
-            console.log(data);
-            let bar1 = document.getElementById('bar' + data.index1.toString());
-            let bar2 = document.getElementById('bar' + data.index2.toString());
-            bar1.style.height = data.value1.toString() + 'px';
-            bar2.style.height = data.value2.toString() + 'px';
-            bar1.setAttribute('class', 'bar ' + data.style);
-            bar2.setAttribute('class', 'bar ' + data.style);
-        })
+            let canvas = document.getElementById('canvas');
+            canvas.innerHTML = ''
+            for (var i = 0; i < data.array.length; i++) {
+                let node = document.createElement('div')
+                node.setAttribute('id', 'bar' + i.toString());
+                node.setAttribute('class', 'bar regular');
+                node.style.width = '2px';
+                node.style.height = data.array[i].toString() + 'px';
+                canvas.appendChild(node);
+            }
+            if (data.index1) {
+                let bar = document.getElementById('bar' + data.index1.toString())
+                bar.setAttribute("class", "bar current")
+            }
+            if (data.index2) {
+                let bar = document.getElementById('bar' + data.index2.toString())
+                bar.setAttribute("class", "bar swapped")
+            }
+        });
 
         function generateArray() {
             socket.emit('generate array');
