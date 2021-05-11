@@ -9,23 +9,7 @@ class Algorithm:
     def __init__(self, array):
         self.array = array
         self.swaps = {}
-
-    def update_display(self, delay=None):
-        print(self.swaps)
-        emit("update array", self.swaps)
-        if delay:
-            time.sleep(delay)
-
-    def get_swaps(self, index1, index2, style):
-        self.swaps["index1"] = index1
-        self.swaps["value1"] = self.array[index1]
-        self.swaps["index2"] = index2
-        self.swaps["value2"] = self.array[index2]
-        self.swaps["style"] = style
-        if style == 'regular':
-            self.update_display()
-        else:
-            self.update_display(.000001)
+        self.display_updater = DisplayUpdate(self.array)
 
     def run(self):
         self.algorithm()
@@ -33,6 +17,7 @@ class Algorithm:
     @classmethod
     def get_name(cls):
         return cls.name
+
 
 
 class BubbleSort(Algorithm):
@@ -46,11 +31,10 @@ class BubbleSort(Algorithm):
         while swapped:
             swapped = False
             for i in range(1, len(self.array)):
-                display_updater = DisplayUpdate(self.array, i - 1, i)
                 if self.array[i - 1] > self.array[i]:
                     self.array[i - 1], self.array[i] = self.array[i], self.array[i - 1]
                     swapped = True
-                display_updater.update()
+                self.display_updater.update(i - 1, i)
 
 
 class BubbleSortOptimized(Algorithm):
@@ -65,11 +49,10 @@ class BubbleSortOptimized(Algorithm):
         while swapped:
             swapped = False
             for i in range(1, n):
-                display_updater = DisplayUpdate(self.array, i - 1, i)
                 if self.array[i - 1] > self.array[i]:
                     self.array[i - 1], self.array[i] = self.array[i], self.array[i - 1]
                     swapped = True
-                display_updater.update()
+                self.display_updater.update(i - 1, i)
             n -= 1
 
 
@@ -86,9 +69,8 @@ class InsertionSort(Algorithm):
             while current_position > 0 and current_element < self.array[current_position - 1]:
                 self.array[current_position] = self.array[current_position - 1]
                 current_position -= 1
-            display_updater = DisplayUpdate(self.array, current_position, i)
             self.array[current_position] = current_element
-            display_updater.update()
+            self.display_updater.update(current_position, i)
 
 
 class Quicksort(Algorithm):
@@ -114,12 +96,10 @@ class Quicksort(Algorithm):
         for j in range(begin, end):
             if array[j] <= pivot:
                 i += 1
-                display_updater = DisplayUpdate(self.array, i, j)
                 array[i], array[j] = array[j], array[i]
-                display_updater.update()
-        display_updater = DisplayUpdate(self.array, i + 1, end)
+                self.display_updater.update(i, j)
         array[i + 1], array[end] = array[end], array[i + 1]
-        display_updater.update()
+        self.display_updater.update(i + 1, end)
         return i + 1
 
 
@@ -133,10 +113,56 @@ class SelectionSort(Algorithm):
         for i in range(len(self.array) - 1):
             min_index = i
             for j in range(i + 1, len(self.array)):
-                display_updater = DisplayUpdate(self.array, min_index, j)
                 if self.array[min_index] > self.array[j]:
                     min_index = j
-                display_updater.update()
-            display_updater = DisplayUpdate(self.array, i, min_index)
+                self.display_updater.update(min_index, j)
             self.array[i], self.array[min_index] = self.array[min_index], self.array[i]
-            display_updater.update()
+            self.display_updater.update(i, min_index)
+
+
+class MergeSort(Algorithm):
+
+    name = "Merge Sort"
+
+    def __init__(self, array):
+        super().__init__(array)
+
+    def algorithm(self,left=None, right=None):
+
+        if left is None:
+            left = 0
+
+        if right is None:
+            right = len(self.array) - 1
+
+        middle = (left + right) // 2
+        if left < right:
+            self.algorithm(left, middle)
+            self.algorithm(middle + 1, right)
+            self.merge(left, middle, middle + 1, right)
+
+    def merge(self, left_begin, left_end, right_begin, right_end):
+        i = left_begin
+        j = right_begin
+        temp = []
+        while i <= left_end and j <= right_end:
+            self.display_updater.update(i, j)
+            if self.array[i] < self.array[j]:
+                temp.append(self.array[i])
+                i += 1
+            else:
+                temp.append(self.array[j])
+                j += 1
+        while i <= left_end:
+            self.display_updater.update(i)
+            temp.append(self.array[i])
+            i += 1
+        while j <= right_end:
+            self.display_updater.update(j)
+            temp.append(self.array[j])
+            j += 1
+        j = 0
+        for i in range(left_begin, right_end + 1):
+            self.array[i] = temp[j]
+            j += 1
+            self.display_updater.update(i)
