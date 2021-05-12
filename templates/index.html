@@ -21,11 +21,11 @@
             crossorigin="anonymous"></script>
     <script type="text/javascript"
             charset="utf-8">
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             let arraySize = getMaxArraySize();
             let arraySizeInput = document.getElementById('arraySize')
             arraySizeInput.value = arraySize;
-            arraySizeInput.addEventListener('input', function(event) {
+            arraySizeInput.addEventListener('input', function (event) {
                 console.log(event.target.value);
                 if (parseInt(event.target.value) > arraySize) {
                     console.log(event.target.value);
@@ -33,7 +33,7 @@
                     alert(`Maximum array size is ${arraySize} due to aesthetics reason`)
                 }
             });
-            window.addEventListener('resize', function() {
+            window.addEventListener('resize', function () {
                 let maxArraySize = getMaxArraySize();
                 let arraySizeInput = document.getElementById('arraySize')
                 if (parseInt(arraySizeInput.value) > maxArraySize) {
@@ -57,11 +57,11 @@
             generateArray(data);
             if (data.index1) {
                 let bar = document.getElementById('bar' + data.index1.toString())
-                bar.setAttribute("class", "bar current")
+                bar.setAttribute('class', 'bar current')
             }
             if (data.index2) {
                 let bar = document.getElementById('bar' + data.index2.toString())
-                bar.setAttribute("class", "bar swapped")
+                bar.setAttribute('class', 'bar swapped')
             }
         });
 
@@ -83,7 +83,8 @@
         }
 
         function getArray() {
-            let arraySize = document.getElementById("arraySize").value
+            stopAlgorithm()
+            let arraySize = document.getElementById('arraySize').value
             if (!arraySize) {
                 arraySize = getMaxArraySize()
             }
@@ -91,8 +92,12 @@
         }
 
         function runAlgorithm() {
-            let algorithm = document.getElementById("algorithms").value
-            socket.emit('run algorithm', {"algorithm": algorithm})
+            let algorithm = document.getElementById('algorithms').value
+            socket.emit('run algorithm', {'algorithm': algorithm})
+        }
+
+        function stopAlgorithm() {
+            socket.emit('stop algorithm')
         }
 
         function getMaxArraySize() {
@@ -126,27 +131,48 @@
                     <li class="nav-item">
                         <div class="input-group m-1">
                             <div class="input-group-prepend">
-                                <label class="input-group-text" for="arraySize">Array size:</label>
+                                <label class="input-group-text"
+                                       for="arraySize">Array size:</label>
                             </div>
-                            <input class="form-control" type="number" id="arraySize" placeholder="Array size" aria-describedby="newArray">
+                            <input class="form-control"
+                                   type="number"
+                                   id="arraySize"
+                                   placeholder="Array size"
+                                   aria-describedby="newArray">
                             <div class="input-group-append">
-                                <button type="button" class="btn btn-outline-light" id="newArray" onclick="getArray()">New array</button>
+                                <button type="button"
+                                        class="btn btn-outline-light"
+                                        id="newArray"
+                                        onclick="getArray()">New array
+                                </button>
                             </div>
                         </div>
                     </li>
                     <li class="nav-item">
                         <div class="input-group m-1">
                             <div class="input-group-prepend">
-                                <label class="input-group-text" for="algorithms">Select algorithm:</label>
+                                <label class="input-group-text"
+                                       for="algorithms">Select algorithm:</label>
                             </div>
-                            <select class="custom-select" id="algorithms" aria-describedby="runButton">
+                            <select class="custom-select"
+                                    id="algorithms"
+                                    aria-describedby="runButton">
                                 <option selected>Select algorithm...</option>
                                 {% for algorithm in algorithms %}
-                                <option value="{{ algorithm.key }}">{{ algorithm.name }}</option>
+                                    <option value="{{ algorithm.key }}">{{ algorithm.name }}</option>
                                 {% endfor %}
                             </select>
                             <div class="input-group-append">
-                                <button class="btn btn-outline-light" type="button" id="runButton" onclick="runAlgorithm()">Run</button>
+                                <button class="btn btn-outline-light"
+                                        type="button"
+                                        id="runButton"
+                                        onclick="runAlgorithm()">Run
+                                </button>
+                                <button class="btn btn-outline-light"
+                                        type="button"
+                                        id="stopButton"
+                                        onclick="stopAlgorithm()">Stop
+                                </button>
                             </div>
                         </div>
                     </li>

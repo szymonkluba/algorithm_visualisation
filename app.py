@@ -1,22 +1,16 @@
-from flask import Flask, render_template
-from flask_socketio import SocketIO, emit
+from multiprocessing import Pool
 
-from algorithms import BubbleSort,  BubbleSortOptimized, InsertionSort, Quicksort, SelectionSort, MergeSort
+from flask import Flask, render_template
+from flask_socketio import SocketIO
+
 from helpers import generate_random_array
+from settings import available_algorithms
 
 app = Flask(__name__)
 socketio = SocketIO(app)
 
 array = []
-
-available_algorithms = {
-    "bubble_sort": BubbleSort,
-    "bubble_sort_optimized": BubbleSortOptimized,
-    "insertion_sort": InsertionSort,
-    "quicksort": Quicksort,
-    "selection_sort": SelectionSort,
-    "merge_sort": MergeSort,
-}
+algorithm = None
 
 
 @app.route('/')
@@ -31,13 +25,21 @@ def index():
 def generate_array(data):
     global array
     array = generate_random_array(int(data["size"]))
-    emit("generated array", {"array": array})
+    socketio.emit("generated array", {"array": array})
 
 
 @socketio.on("run algorithm")
 def run_algorithm(data):
-    algorithm = available_algorithms[data["algorithm"]](array)
-    algorithm.run()
+    global algorithm
+    algorithm = available_algorithms[data["algorithm"]](array, socketio)
+    algorithm.run_algorithm()
+
+
+@socketio.on("stop algorithm")
+def stop_algorithm():
+    global algorithm
+    if algorithm:
+        algorithm.stopped = True
 
 
 if __name__ == '__main__':

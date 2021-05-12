@@ -1,30 +1,11 @@
-import time
-
-from flask_socketio import emit
-
-from display_update import DisplayUpdate
-
-
-class Algorithm:
-    def __init__(self, array):
-        self.array = array
-        self.swaps = {}
-        self.display_updater = DisplayUpdate(self.array)
-
-    def run(self):
-        self.algorithm()
-
-    @classmethod
-    def get_name(cls):
-        return cls.name
-
+from algorithm import Algorithm
 
 
 class BubbleSort(Algorithm):
     name = "Bubble Sort"
 
-    def __init__(self, array):
-        super().__init__(array)
+    def __init__(self, array, socket):
+        super().__init__(array, socket)
 
     def algorithm(self):
         swapped = True
@@ -40,15 +21,19 @@ class BubbleSort(Algorithm):
 class BubbleSortOptimized(Algorithm):
     name = "Bubble Sort Optimized"
 
-    def __init__(self, array):
-        super().__init__(array)
+    def __init__(self, array, socket):
+        super().__init__(array, socket)
 
     def algorithm(self):
         swapped = True
         n = len(self.array)
         while swapped:
+            if self.stopped:
+                break
             swapped = False
             for i in range(1, n):
+                if self.stopped:
+                    break
                 if self.array[i - 1] > self.array[i]:
                     self.array[i - 1], self.array[i] = self.array[i], self.array[i - 1]
                     swapped = True
@@ -59,8 +44,8 @@ class BubbleSortOptimized(Algorithm):
 class InsertionSort(Algorithm):
     name = "Insertion Sort"
 
-    def __init__(self, array):
-        super().__init__(array)
+    def __init__(self, array, socket):
+        super().__init__(array, socket)
 
     def algorithm(self):
         for i in range(1, len(self.array)):
@@ -76,8 +61,8 @@ class InsertionSort(Algorithm):
 class Quicksort(Algorithm):
     name = "Quicksort"
 
-    def __init__(self, array):
-        super().__init__(array)
+    def __init__(self, array, socket):
+        super().__init__(array, socket)
 
     def algorithm(self, array=None, begin=0, end=0):
         if not array:
@@ -106,8 +91,8 @@ class Quicksort(Algorithm):
 class SelectionSort(Algorithm):
     name = "Selection Sort"
 
-    def __init__(self, array):
-        super().__init__(array)
+    def __init__(self, array, socket):
+        super().__init__(array, socket)
 
     def algorithm(self):
         for i in range(len(self.array) - 1):
@@ -121,13 +106,12 @@ class SelectionSort(Algorithm):
 
 
 class MergeSort(Algorithm):
-
     name = "Merge Sort"
 
-    def __init__(self, array):
-        super().__init__(array)
+    def __init__(self, array, socket):
+        super().__init__(array, socket)
 
-    def algorithm(self,left=None, right=None):
+    def algorithm(self, left=None, right=None):
 
         if left is None:
             left = 0
