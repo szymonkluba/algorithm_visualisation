@@ -23,4 +23,4 @@ class DisplayUpdate:
         self.index2 = index2
         self.get_data()
         emit("update array", self.data)
-        time.sleep(.01)
+        time.sleep(.1)

@@ -21,6 +21,20 @@
             crossorigin="anonymous"></script>
     <script type="text/javascript"
             charset="utf-8">
+        document.addEventListener('DOMContentLoaded', function() {
+            let arraySize = getMaxArraySize();
+            let arraySizeInput = document.getElementById('arraySize')
+            arraySizeInput.value = arraySize;
+            arraySizeInput.addEventListener('input', function(event) {
+                console.log(event.target.value);
+                if (parseInt(event.target.value) > arraySize) {
+                    console.log(event.target.value);
+                    event.target.value = arraySize.toString();
+                    alert(`Maximum array size is ${arraySize} due to aesthetics reason`)
+                }
+            });
+        });
+
         var socket = io();
 
         socket.on('connect', function () {
@@ -28,29 +42,11 @@
         });
 
         socket.on('generated array', data => {
-            let canvas = document.getElementById('canvas');
-            canvas.innerHTML = ''
-            for (var i = 0; i < data.array.length; i++) {
-                let node = document.createElement('div')
-                node.setAttribute('id', 'bar' + i.toString());
-                node.setAttribute('class', 'bar regular');
-                node.style.width = '2px';
-                node.style.height = data.array[i].toString() + 'px';
-                canvas.appendChild(node);
-            }
+            generateArray(data);
         });
 
         socket.on('update array', data => {
-            let canvas = document.getElementById('canvas');
-            canvas.innerHTML = ''
-            for (var i = 0; i < data.array.length; i++) {
-                let node = document.createElement('div')
-                node.setAttribute('id', 'bar' + i.toString());
-                node.setAttribute('class', 'bar regular');
-                node.style.width = '2px';
-                node.style.height = data.array[i].toString() + 'px';
-                canvas.appendChild(node);
-            }
+            generateArray(data);
             if (data.index1) {
                 let bar = document.getElementById('bar' + data.index1.toString())
                 bar.setAttribute("class", "bar current")
@@ -61,14 +57,40 @@
             }
         });
 
-        function generateArray() {
-            socket.emit('generate array');
+        function generateArray(data) {
+            let canvas = document.getElementById('canvas');
+            canvas.innerHTML = ''
+            barWidth = ~~(canvas.clientWidth / data.array.length) - 2;
+            for (var i = 0; i < data.array.length; i++) {
+                let node = document.createElement('div')
+                node.setAttribute('id', 'bar' + i.toString());
+                node.setAttribute('class', 'bar regular');
+                node.style.width = barWidth.toString() + 'px';
+                node.style.height = data.array[i].toString() + 'px';
+                canvas.appendChild(node);
+            }
+        }
+
+        function getArray() {
+            let arraySize = document.getElementById("arraySize").value
+            if (!arraySize) {
+                arraySize = getMaxArraySize()
+            }
+            socket.emit('generate array', {"size": arraySize});
         }
 
         function runAlgorithm() {
             let algorithm = document.getElementById("algorithms").value
             socket.emit('run algorithm', {"algorithm": algorithm})
         }
+
+        function getMaxArraySize() {
+            let canvas = document.getElementById('canvas')
+            let width = canvas.clientWidth;
+            return ~~(width / 4)
+        }
+
+
     </script>
     <title>Algorithm Visualisation</title>
 </head>
@@ -91,31 +113,39 @@
                  id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link"
-                           href="#"
-                           onclick="generateArray()">New array</a>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="arraySize">Array size:</label>
+                            </div>
+                            <input class="from-control" type="number" id="arraySize" placeholder="Array size" aria-describedby="newArray">
+                            <div>
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-outline-secondary" id="newArray" onclick="getArray()">New array</button>
+                                </div>
+                            </div>
+                        </div>
                     </li>
                     <li class="nav-item">
-                        <div class="form-group">
-                            <select class="form-control" id="algorithms">
-                                <option value="">Select algorithm...</option>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="algorithms">Select algorithm:</label>
+                            </div>
+                            <select class="custom-select" id="algorithms" aria-describedby="runButton">
+                                <option selected>Select algorithm...</option>
                                 {% for algorithm in algorithms %}
                                 <option value="{{ algorithm.key }}">{{ algorithm.name }}</option>
                                 {% endfor %}
                             </select>
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="button" id="runButton" onclick="runAlgorithm()">Run</button>
+                            </div>
                         </div>
-
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link"
-                           href="#"
-                           onclick="runAlgorithm()">Run</a>
                     </li>
                 </ul>
             </div>
         </nav>
     </header>
-    <div class="d-inline-flex align-items-end mx-auto"
+    <div class="d-inline-flex align-items-end mx-auto w-100"
          id="canvas">
 
     </div>

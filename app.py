@@ -28,9 +28,9 @@ def index():
 
 
 @socketio.on("generate array")
-def generate_array():
+def generate_array(data):
     global array
-    array = generate_random_array()
+    array = generate_random_array(int(data["size"]))
     emit("generated array", {"array": array})
 
 
