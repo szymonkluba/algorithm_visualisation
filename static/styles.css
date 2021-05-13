@@ -33,6 +33,12 @@ html, body {
     max-height: 100%;
     background-color: #333;
     box-shadow: 0 0 1em black;
+    border-radius: 1em;
+}
+
+nav {
+    border-radius: 1em;
+    box-shadow: .5em .5em 1em #222;
 }
 
 #canvas {
