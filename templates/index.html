@@ -68,13 +68,13 @@
         function generateArray(data) {
             let canvas = document.getElementById('canvas');
             canvas.innerHTML = ''
-            barWidth = ~~(canvas.clientWidth / data.array.length) - 2;
+            barWidth = (~~(canvas.clientWidth / data.array.length)) - 2;
             for (var i = 0; i < data.array.length; i++) {
                 let node = document.createElement('div')
                 node.setAttribute('id', 'bar' + i.toString());
                 node.setAttribute('class', 'bar regular');
                 node.style.width = barWidth.toString() + 'px';
-                node.style.height = (data.array[i] * 2).toString() + 'px';
+                node.style.height = data.array[i].toString() + '%';
                 if (barWidth > 50) {
                     node.innerHTML = data.array[i];
                 }
@@ -110,10 +110,10 @@
     </script>
     <title>Algorithm Visualisation</title>
 </head>
-<body>
-<div class="container d-flex w-100 h-100 p-3 mx-auto flex-column">
+<body class="text-center p-3" id="body">
+<div class="body-container h-100 p-3 mx-auto flex-column align-items-center justify-content-center">
     <header class="mb-auto">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <a class="navbar-brand m-1"
                href="#">Algorithm Visualization</a>
             <button class="navbar-toggler"
@@ -180,9 +180,11 @@
             </div>
         </nav>
     </header>
-    <div class="d-inline-flex align-items-end mx-auto w-100"
+    <div class="container w-100 m-auto p-3">
+        <div class="d-inline-flex align-items-end mx-auto w-100 justify-content-center"
          id="canvas">
-
+            <h1 class="text-muted">Press "New array" to generate new array, then select algorithm and press "Run"</h1>
+        </div>
     </div>
 </div>
 </body>

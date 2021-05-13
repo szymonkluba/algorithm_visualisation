@@ -3,91 +3,75 @@
 }
 
 .bar.regular {
-    background-color: cornflowerblue!important;
+    background-color: #42fcff !important;
 }
 
 .bar.current {
-    background-color: chartreuse!important;
+    background-color: #ffa442 !important;
 }
 
 .bar.swapped {
-    background-color: gold!important;
+    background-color: #ff429d !important;
 }
 
-input[type=range] {
-    height: 30px;
-    -webkit-appearance: none;
-    width: 100%;
+html, body {
+    height: 100%;
 }
 
-input[type=range]:focus {
-    outline: none;
+#body {
+    display: -ms-flexbox;
+    display: flex;
+    background-color: #000;
+    background-image: url("background.jpg");
+    background-repeat: repeat-x;
+    background-attachment: fixed;
+    box-shadow: inset 0 0 15rem rgba(0, 0, 0, .8);
 }
 
-input[type=range]::-webkit-slider-runnable-track {
-  width: 100%;
-  height: 30px;
-  cursor: pointer;
-  animate: 0.2s;
-  box-shadow: 1px 1px 1px #000000;
-  background: #3071A9;
-  border-radius: 27px;
-  border: 1px solid #000000;
+.body-container {
+    max-width: 60em;
+    max-height: 100%;
+    background-color: #333;
+    box-shadow: 0 0 1em black;
 }
 
-input[type=range]::-webkit-slider-thumb {
-  box-shadow: 1px 1px 1px #000000;
-  border: 1px solid #000000;
-  height: 30px;
-  width: 32px;
-  border-radius: 50px;
-  background: #FFFFFF;
-  cursor: pointer;
-  -webkit-appearance: none;
-  margin-top: -1px;
+#canvas {
+    background-color: #333;
+    height: 50vh;
 }
 
-input[type=range]:focus::-webkit-slider-runnable-track {
-  background: #3071A9;
+#runButton {
+    border-color: limegreen;
+    color: limegreen;
 }
 
-input[type=range]::-ms-track {
-  width: 100%;
-  height: 30px;
-  cursor: pointer;
-  animate: 0.2s;
-  background: transparent;
-  border-color: transparent;
-  color: transparent;
-}
-input[type=range]::-ms-fill-lower {
-  background: #3071A9;
-  border: 1px solid #000000;
-  border-radius: 54px;
-  box-shadow: 1px 1px 1px #000000;
-}
-input[type=range]::-ms-fill-upper {
-  background: #3071A9;
-  border: 1px solid #000000;
-  border-radius: 54px;
-  box-shadow: 1px 1px 1px #000000;
-}
-input[type=range]::-ms-thumb {
-  margin-top: 1px;
-  box-shadow: 1px 1px 1px #000000;
-  border: 1px solid #000000;
-  height: 30px;
-  width: 32px;
-  border-radius: 50px;
-  background: #FFFFFF;
-  cursor: pointer;
-}
-input[type=range]:focus::-ms-fill-lower {
-  background: #3071A9;
-}
-input[type=range]:focus::-ms-fill-upper {
-  background: #3071A9;
+#runButton:hover {
+    background-color: limegreen;
+    color: #333;
 }
 
+#stopButton {
+    border-color: red;
+    color: red;
+}
 
+#stopButton:hover {
+    background-color: red;
+    color: #333;
+}
 
+#newArray {
+    border-color: #42fcff;
+    color: #42fcff;
+}
+
+#newArray:hover {
+    color: #333;
+    background-color: #42fcff;
+}
+
+.input-group-text {
+    border-color: #42fcff !important;
+    color: #42fcff !important;
+    background-color: transparent !important;
+}
