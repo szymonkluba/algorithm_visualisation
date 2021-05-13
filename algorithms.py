@@ -10,8 +10,12 @@ class BubbleSort(Algorithm):
     def algorithm(self):
         swapped = True
         while swapped:
+            if self.stopped:
+                break
             swapped = False
             for i in range(1, len(self.array)):
+                if self.stopped:
+                    break
                 if self.array[i - 1] > self.array[i]:
                     self.array[i - 1], self.array[i] = self.array[i], self.array[i - 1]
                     swapped = True
@@ -49,9 +53,13 @@ class InsertionSort(Algorithm):
 
     def algorithm(self):
         for i in range(1, len(self.array)):
+            if self.stopped:
+                break
             current_element = self.array[i]
             current_position = i
             while current_position > 0 and current_element < self.array[current_position - 1]:
+                if self.stopped:
+                    break
                 self.array[current_position] = self.array[current_position - 1]
                 current_position -= 1
             self.array[current_position] = current_element
@@ -70,15 +78,21 @@ class Quicksort(Algorithm):
             end = len(self.array) - 1
         if begin >= end:
             return
+        if self.stopped:
+            return
 
         pivot_index = self.partition(array, begin, end)
         self.algorithm(array, begin, pivot_index - 1)
         self.algorithm(array, pivot_index + 1, end)
 
     def partition(self, array, begin, end):
+        if self.stopped:
+            return
         i = begin - 1
         pivot = array[end]
         for j in range(begin, end):
+            if self.stopped:
+                break
             if array[j] <= pivot:
                 i += 1
                 array[i], array[j] = array[j], array[i]
@@ -96,8 +110,12 @@ class SelectionSort(Algorithm):
 
     def algorithm(self):
         for i in range(len(self.array) - 1):
+            if self.stopped:
+                break
             min_index = i
             for j in range(i + 1, len(self.array)):
+                if self.stopped:
+                    break
                 if self.array[min_index] > self.array[j]:
                     min_index = j
                 self.display_updater.update(min_index, j)
@@ -113,6 +131,9 @@ class MergeSort(Algorithm):
 
     def algorithm(self, left=None, right=None):
 
+        if self.stopped:
+            return
+
         if left is None:
             left = 0
 
@@ -126,10 +147,14 @@ class MergeSort(Algorithm):
             self.merge(left, middle, middle + 1, right)
 
     def merge(self, left_begin, left_end, right_begin, right_end):
+        if self.stopped:
+            return
         i = left_begin
         j = right_begin
         temp = []
         while i <= left_end and j <= right_end:
+            if self.stopped:
+                break
             self.display_updater.update(i, j)
             if self.array[i] < self.array[j]:
                 temp.append(self.array[i])
@@ -138,15 +163,21 @@ class MergeSort(Algorithm):
                 temp.append(self.array[j])
                 j += 1
         while i <= left_end:
+            if self.stopped:
+                break
             self.display_updater.update(i)
             temp.append(self.array[i])
             i += 1
         while j <= right_end:
+            if self.stopped:
+                break
             self.display_updater.update(j)
             temp.append(self.array[j])
             j += 1
         j = 0
         for i in range(left_begin, right_end + 1):
+            if self.stopped:
+                break
             self.array[i] = temp[j]
             j += 1
             self.display_updater.update(i)
