@@ -1,5 +1,7 @@
 import time
 
+""" Display updater class """
+
 
 class DisplayUpdate:
 
@@ -13,6 +15,8 @@ class DisplayUpdate:
 
     def get_data(self):
         self.data["array"] = self.array
+
+        # Include indexes of bars to be highlighted
         if self.index1 is not None:
             self.data["index1"] = self.index1
         if self.index2 is not None:
@@ -26,4 +30,5 @@ class DisplayUpdate:
         time.sleep(self.delay)
 
     def set_delay(self):
+        # Delay depends on array size
         return 1 / len(self.array)

@@ -1,5 +1,7 @@
 from algorithm import Algorithm
 
+""" Class for Bubble Sort """
+
 
 class BubbleSort(Algorithm):
     name = "Bubble Sort"
@@ -20,6 +22,9 @@ class BubbleSort(Algorithm):
                     self.array[i - 1], self.array[i] = self.array[i], self.array[i - 1]
                     swapped = True
                 self.display_updater.update(i - 1, i)
+
+
+""" Class for optimized Bubble sort """
 
 
 class BubbleSortOptimized(Algorithm):
@@ -45,6 +50,9 @@ class BubbleSortOptimized(Algorithm):
             n -= 1
 
 
+""" Class for Insertion Sort """
+
+
 class InsertionSort(Algorithm):
     name = "Insertion Sort"
 
@@ -67,40 +75,45 @@ class InsertionSort(Algorithm):
             self.display_updater.update(current_position, i)
 
 
+""" Class for Quicksort """
+
+
 class Quicksort(Algorithm):
     name = "Quicksort"
 
     def __init__(self, array, socket):
         super().__init__(array, socket)
 
-    def algorithm(self, array=None, begin=0, end=0):
-        if not array:
-            array = self.array
+    def algorithm(self, begin=0, end=None):
+        if not end:
             end = len(self.array) - 1
         if begin >= end:
             return
         if self.stopped:
             return
 
-        pivot_index = self.partition(array, begin, end)
-        self.algorithm(array, begin, pivot_index - 1)
-        self.algorithm(array, pivot_index + 1, end)
+        pivot_index = self.partition(begin, end)
+        self.algorithm(begin, pivot_index - 1)
+        self.algorithm(pivot_index + 1, end)
 
-    def partition(self, array, begin, end):
+    def partition(self, begin, end):
         if self.stopped:
             return
         i = begin - 1
-        pivot = array[end]
+        pivot = self.array[end]
         for j in range(begin, end):
             if self.stopped:
                 break
-            if array[j] <= pivot:
+            if self.array[j] <= pivot:
                 i += 1
-                array[i], array[j] = array[j], array[i]
+                self.array[i], self.array[j] = self.array[j], self.array[i]
                 self.display_updater.update(i, j)
-        array[i + 1], array[end] = array[end], array[i + 1]
+        self.array[i + 1], self.array[end] = self.array[end], self.array[i + 1]
         self.display_updater.update(i + 1, end)
         return i + 1
+
+
+""" Class for Selection Sort """
 
 
 class SelectionSort(Algorithm):
@@ -122,6 +135,9 @@ class SelectionSort(Algorithm):
                 self.display_updater.update(min_index, j)
             self.array[i], self.array[min_index] = self.array[min_index], self.array[i]
             self.display_updater.update(i, min_index)
+
+
+""" Class for Merge Sort """
 
 
 class MergeSort(Algorithm):
@@ -147,6 +163,7 @@ class MergeSort(Algorithm):
             self.algorithm(middle + 1, right)
             self.merge(left, middle, middle + 1, right)
 
+    # Helper method for merging subarray
     def merge(self, left_begin, left_end, right_begin, right_end):
         if self.stopped:
             return
@@ -184,13 +201,19 @@ class MergeSort(Algorithm):
             self.display_updater.update(i)
 
 
+""" Class for Heap Sort """
+
+
 class HeapSort(Algorithm):
     name = "Heap Sort"
 
     def __init__(self, array, socket):
         super().__init__(array, socket)
 
+    # Helper method for building heap
     def build_heap(self, size, index):
+        if self.stopped:
+            return
         largest = index
         left = 2 * index + 1
         right = 2 * index + 2
@@ -210,12 +233,18 @@ class HeapSort(Algorithm):
             self.build_heap(size, largest)
 
     def algorithm(self):
+        if self.stopped:
+            return
         size = len(self.array)
 
         for i in range(size // 2 - 1, -1, -1):
+            if self.stopped:
+                break
             self.build_heap(size, i)
 
         for i in range(size - 1, 0, -1):
+            if self.stopped:
+                break
             self.array[i], self.array[0] = self.array[0], self.array[i]
             self.display_updater.update(i, 0)
             print(self.array)

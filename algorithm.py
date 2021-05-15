@@ -2,6 +2,7 @@ from display_update import DisplayUpdate
 
 
 class Algorithm:
+    """ Base algorithm class """
     def __init__(self, array, socket):
         self.array = array
         self.socket = socket
