@@ -26,4 +26,4 @@ class DisplayUpdate:
         time.sleep(self.delay)
 
     def set_delay(self):
-        return .0001 * (10000 / len(self.array))
+        return 1 / len(self.array)

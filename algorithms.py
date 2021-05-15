@@ -183,3 +183,40 @@ class MergeSort(Algorithm):
             j += 1
             self.display_updater.update(i)
 
+
+class HeapSort(Algorithm):
+    name = "Heap Sort"
+
+    def __init__(self, array, socket):
+        super().__init__(array, socket)
+
+    def build_heap(self, size, index):
+        largest = index
+        left = 2 * index + 1
+        right = 2 * index + 2
+
+        print(self.array)
+        if left < size and self.array[largest] < self.array[left]:
+            largest = left
+
+        print(self.array)
+        if right < size and self.array[largest] < self.array[right]:
+            largest = right
+
+        if largest != index:
+            self.display_updater.update(index, largest)
+            print(self.array)
+            self.array[index], self.array[largest] = self.array[largest], self.array[index]
+            self.build_heap(size, largest)
+
+    def algorithm(self):
+        size = len(self.array)
+
+        for i in range(size // 2 - 1, -1, -1):
+            self.build_heap(size, i)
+
+        for i in range(size - 1, 0, -1):
+            self.array[i], self.array[0] = self.array[0], self.array[i]
+            self.display_updater.update(i, 0)
+            print(self.array)
+            self.build_heap(i, 0)

@@ -1,4 +1,4 @@
-from algorithms import BubbleSort, BubbleSortOptimized, InsertionSort, Quicksort, SelectionSort, MergeSort
+from algorithms import BubbleSort, BubbleSortOptimized, InsertionSort, Quicksort, SelectionSort, MergeSort, HeapSort
 
 available_algorithms = {
     "bubble_sort": BubbleSort,
@@ -7,4 +7,5 @@ available_algorithms = {
     "quicksort": Quicksort,
     "selection_sort": SelectionSort,
     "merge_sort": MergeSort,
+    "heap_sort": HeapSort,
 }
