@@ -31,8 +31,11 @@ def generate_array(data):
 @socketio.on("run algorithm")
 def run_algorithm(data):
     global algorithm
-    algorithm = available_algorithms[data["algorithm"]](array, socketio)
-    algorithm.run_algorithm()
+    try:
+        algorithm = available_algorithms[data["algorithm"]](array, socketio)
+        algorithm.run_algorithm()
+    except KeyError:
+        socketio.emit("choose algorithm")
 
 
 @socketio.on("stop algorithm")

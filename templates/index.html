@@ -65,6 +65,10 @@
             }
         });
 
+        socket.on('choose algorithm', function () {
+            alert('Please choose the algorithm you want to visualize.')
+        })
+
         function generateArray(data) {
             let canvas = document.getElementById('canvas');
             canvas.innerHTML = ''
