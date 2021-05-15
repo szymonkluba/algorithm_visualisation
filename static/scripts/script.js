@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 node.setAttribute('class', 'bar regular');
                 node.style.width = barWidth.toString() + 'px';
                 node.style.height = data.array[i].toString() + '%';
-                if (barWidth > 50) {
+                if (barWidth > 20) {
                     node.innerHTML = data.array[i];
                 }
                 canvas.appendChild(node);
