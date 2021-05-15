@@ -33,17 +33,22 @@ html, body {
     max-height: 100%;
     background-color: #333;
     box-shadow: 0 0 1em black;
-    border-radius: 1em;
+    border-radius: .5em;
+    border-width: 1px !important;
+    border-color: #6c757d;
 }
 
 nav {
-    border-radius: 1em;
+    border-radius: .5em;
+    border-width: 1px !important;
+    border-color: #6c757d;
     box-shadow: .5em .5em 1em #222;
 }
 
 #canvas {
     background-color: #333;
     height: 50vh;
+    margin-top: 10vh;
 }
 
 #runButton {
@@ -80,4 +85,8 @@ nav {
     border-color: #42fcff !important;
     color: #42fcff !important;
     background-color: transparent !important;
+}
+
+#prompt {
+    align-self: center;
 }
