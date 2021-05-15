@@ -58,6 +58,7 @@ class InsertionSort(Algorithm):
             current_element = self.array[i]
             current_position = i
             while current_position > 0 and current_element < self.array[current_position - 1]:
+                self.display_updater.update(current_position, current_position - 1)
                 if self.stopped:
                     break
                 self.array[current_position] = self.array[current_position - 1]
@@ -181,3 +182,4 @@ class MergeSort(Algorithm):
             self.array[i] = temp[j]
             j += 1
             self.display_updater.update(i)
+
